@@ -2,9 +2,7 @@
 
 A local-model layer in front of Claude Code: a small local LLM routes, clarifies and
 compiles requests, and only a clean prompt reaches Claude. Implementation: Python 3.12
-with `uv` (`src/`, `tests/`, `pyproject.toml`). A Rust skeleton is parked in `rust/` for a
-possible port after the ML part is finished (tag `python-reference` marks the Python
-state at the time of the Rust trial).
+with `uv` (`src/`, `tests/`, `pyproject.toml`).
 Plan and design: `docs/building.md` (milestones), `docs/design.md`, `docs/schemas.md`.
 
 ## Working contract (this is a learning project)
@@ -33,9 +31,7 @@ Plan and design: `docs/building.md` (milestones), `docs/design.md`, `docs/schema
 - Docs, schedules and notes may be written by Claude when asked.
 
 ## Commands
-- `make test`, `make lint`, `make lint-fix`, `make format`, `make goldens` (Python:
-  pytest and ruff). The parked Rust skeleton uses `make rs-test`, `make rs-lint`,
-  `make rs-format`.
+- `make test`, `make lint`, `make lint-fix`, `make format`, `make goldens` (pytest and ruff).
 - Run `make format` then `make lint-fix` before committing.
 
 ## Conventions
@@ -54,4 +50,4 @@ Plan and design: `docs/building.md` (milestones), `docs/design.md`, `docs/schema
   changes get their own commit.
 - Stage files by name; never `git add .` or `-A` on a messy tree.
 - Run `git status` before any command that could discard work. Stash or commit first.
-- Do not commit `src/ocl/.config` (local placeholder) or `.claude/skills/` (ignored).
+- Do not commit `src/.config` (local placeholder) or `.claude/skills/` (ignored).

@@ -1,7 +1,7 @@
 import json
 from collections import Counter
 
-from ocl.golden import Golden
+from src.golden import Golden
 
 
 def test_loading_from_file() -> None:

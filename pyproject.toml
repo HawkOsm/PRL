@@ -1,5 +1,5 @@
 [project]
-name = "ocl"
+name = "prl"
 version = "0.1.0"
 description = "Add your description here"
 readme = "README.md"
@@ -12,11 +12,16 @@ dependencies = [
 ]
 
 [project.scripts]
-ocl = "ocl:main"
+prl = "src:main"
 
 [build-system]
 requires = ["uv_build>=0.12.3,<0.13.0"]
 build-backend = "uv_build"
+
+[tool.uv.build-backend]
+# the code lives directly in ./src, so the importable package is called "src"
+module-root = ""
+module-name = "src"
 
 [dependency-groups]
 dev = [

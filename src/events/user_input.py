@@ -1,6 +1,6 @@
 from typing import Literal
 
-from ocl.events.base import Events
+from src.events.base import Events
 
 
 class UserInput(Events):

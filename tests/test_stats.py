@@ -1,6 +1,6 @@
 from datetime import UTC
 
-from ocl.stats import Stats
+from src.stats import Stats
 
 
 def test_stats_initialization() -> None:
@@ -17,8 +17,8 @@ def test_stats_with_data() -> None:
     # Create mock events
     from datetime import datetime, timedelta
 
-    from ocl.events.route_decision import RouteDecision
-    from ocl.events.user_input import UserInput
+    from src.events.route_decision import RouteDecision
+    from src.events.user_input import UserInput
 
     now = datetime.now(UTC)
     events = [

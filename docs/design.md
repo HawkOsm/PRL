@@ -226,11 +226,11 @@ Only one Claude stream at a time; input during streaming is queued (or Ctrl+C to
 
 | Item                           | Default                                                                     |
 | ------------------------------ | --------------------------------------------------------------------------- |
-| Project name                   | **PRL** (repo); CLI command: `prl` (Python package still `ocl`, rename pending) |
+| Project name                   | **PRL** (repo); CLI command: `prl`  |
 | REPL lib                       | `prompt_toolkit` v1; Textual only if scrollback/stream rendering hurts    |
 | Where triage answers come from | Same 7–8B model, no web access, tagged`[local]`                          |
 | Trivial-answer risk appetite   | Conservative: router requires high confidence for TRIVIAL, else PASSTHROUGH |
-| Repo layout                    | `src/ocl/` + `prompts/` + `tests/`; `pyproject.toml` via uv         |
+| Repo layout                    | `src/` + `prompts/` + `tests/`; `pyproject.toml` via uv         |
 
 ## 15. Build order (maps to roadmap phases)
 

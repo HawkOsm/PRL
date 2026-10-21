@@ -2,11 +2,11 @@ import argparse
 
 
 def main() -> None:
-    argument = "Hello from ocl!"
-    argparser = argparse.ArgumentParser(description="OptimizedClaude")
+    argument = "Hello from prl!"
+    argparser = argparse.ArgumentParser(description="Prompt Refine Loop")
     argparser.add_argument(
         "--version",
         action="version",
-        version="ocl 0.1.0",
+        version="prl 0.1.0",
     )
     print(argument)

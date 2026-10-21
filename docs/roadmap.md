@@ -7,8 +7,7 @@ deeply optimized. No multi-provider routing.
 
 Name: **PRL (Prompt Refine Loop)** — repo: github.com/HawkOsm/prompt-refine-loop
 (renamed from OptimizedClaude to avoid using the Claude trademark). CLI command: `prl`.
-Implementation: Python (decided 2026-10-13; AI/ML jobs mostly ask for Python). A Rust
-skeleton is parked in `rust/` for a possible port after the ML part is finished.
+Implementation: Python (decided 2026-10-13; AI/ML jobs mostly ask for Python).
 
 ---
 
