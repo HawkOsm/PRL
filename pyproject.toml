@@ -11,17 +11,12 @@ dependencies = [
     "pydantic>=2.13.4",
 ]
 
-[project.scripts]
-prl = "src:main"
+# PRL is an application run from the repo (make run), not an installable library.
+[tool.uv]
+package = false
 
-[build-system]
-requires = ["uv_build>=0.12.3,<0.13.0"]
-build-backend = "uv_build"
-
-[tool.uv.build-backend]
-# the code lives directly in ./src, so the importable package is called "src"
-module-root = ""
-module-name = "src"
+[tool.pytest.ini_options]
+pythonpath = ["src"]
 
 [dependency-groups]
 dev = [
@@ -34,6 +29,7 @@ dev = [
 [tool.ruff]
 line-length = 88
 target-version = "py312"
+src = ["src"]
 
 [tool.ruff.lint]
 select = ["E", "F", "I", "UP", "B", "SIM", "N", "C901", "ANN"]

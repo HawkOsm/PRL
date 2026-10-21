@@ -3,9 +3,9 @@ from datetime import UTC, datetime
 
 from freezegun import freeze_time
 
-from src.events.route_decision import RouteDecision
-from src.events.user_input import UserInput
-from src.legder import Ledger
+from events.route_decision import RouteDecision
+from events.user_input import UserInput
+from legder import Ledger
 
 
 @freeze_time("2023-01-01 12:00:00")

@@ -1,4 +1,4 @@
-.PHONY: test lint lint-fix format goldens
+.PHONY: test lint lint-fix format goldens run
 
 test:
 	uv run pytest
@@ -14,3 +14,6 @@ format:
 
 goldens:
 	echo "no golden harness runner yet (M3)"
+
+run:
+	uv run python src/main.py

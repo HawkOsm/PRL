@@ -1,7 +1,7 @@
 from pathlib import Path
 
-from src.golden import Golden
-from src.harness import CaseResult, run
+from golden import Golden
+from harness import CaseResult, run
 
 
 def passthrough_router(message: str, session_active: bool) -> str:

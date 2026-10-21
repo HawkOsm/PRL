@@ -31,7 +31,7 @@ Plan and design: `docs/building.md` (milestones), `docs/design.md`, `docs/schema
 - Docs, schedules and notes may be written by Claude when asked.
 
 ## Commands
-- `make test`, `make lint`, `make lint-fix`, `make format`, `make goldens` (pytest and ruff).
+- `make test`, `make lint`, `make lint-fix`, `make format`, `make goldens` (pytest and ruff), `make run` (runs `src/main.py`).
 - Run `make format` then `make lint-fix` before committing.
 
 ## Conventions

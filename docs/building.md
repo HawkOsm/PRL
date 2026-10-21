@@ -46,7 +46,7 @@ untouched, answer trivia locally. Everything logged to `.prl/ledger.jsonl`.
 
 ## Ground rules (apply from day one)
 
-- **uv + Python 3.12**, code lives directly in `src/` (the package is named `src`). Never install into system python.
+- **uv + Python 3.12**, modules live directly in `src/` and are imported by plain name (`from events.base import Events`; pytest uses `pythonpath = ["src"]`). Never install into system python.
 - **TDD rhythm** where the code is pure (ledger, config, router heuristics, rendering):
   write the failing test, make it pass, clean up. Async/UI code gets tests after, but
   gets them.
@@ -64,7 +64,7 @@ untouched, answer trivia locally. Everything logged to `.prl/ledger.jsonl`.
 
 **Picture:** empty package that installs, lints, and runs one dummy test.
 
-- Build: `pyproject.toml` via uv, `src/__init__.py`, `tests/test_smoke.py`,
+- Build: `pyproject.toml` via uv, `src/main.py`, `tests/test_smoke.py`,
   ruff config, a `Makefile` or `justfile` with `test`, `lint`, `goldens` targets.
 - Search: `uv python project src layout` · `pyproject.toml scripts entry point` ·
   `ruff configuration pyproject` · `pytest getting started`

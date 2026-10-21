@@ -3,9 +3,9 @@ from typing import Annotated
 
 from pydantic import BaseModel, Field, TypeAdapter, ValidationError
 
-from src.events.base import Events
-from src.events.route_decision import RouteDecision
-from src.events.user_input import UserInput
+from events.base import Events
+from events.route_decision import RouteDecision
+from events.user_input import UserInput
 
 EventUnion = Annotated[UserInput | RouteDecision, Field(discriminator="event")]
 _adapter: TypeAdapter[EventUnion] = TypeAdapter(EventUnion)

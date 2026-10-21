@@ -10,3 +10,7 @@ def main() -> None:
         version="prl 0.1.0",
     )
     print(argument)
+
+
+if __name__ == "__main__":
+    main()

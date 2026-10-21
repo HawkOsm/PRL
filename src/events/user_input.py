@@ -1,6 +1,6 @@
 from typing import Literal
 
-from src.events.base import Events
+from events.base import Events
 
 
 class UserInput(Events):

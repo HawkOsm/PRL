@@ -3,7 +3,7 @@ from typing import Literal
 
 from pydantic import Field, ValidationInfo, field_validator
 
-from src.events.base import Events
+from events.base import Events
 
 
 class RouteDecision(Events):

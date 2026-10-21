@@ -1,5 +1,5 @@
-import src
+from main import main
 
 
 def test_smoke() -> None:
-    assert src.main() is None
+    assert main() is None

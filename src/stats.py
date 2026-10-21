@@ -2,7 +2,7 @@ from typing import Literal
 
 from pydantic import BaseModel
 
-from src.events.base import Events
+from events.base import Events
 
 
 class Stats(BaseModel):
