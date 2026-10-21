@@ -13,7 +13,7 @@ format:
 	uv run ruff format .
 
 goldens:
-	echo "no golden harness runner yet (M3)"
+	uv run python src/run_goldens.py
 
 run:
 	uv run python src/main.py

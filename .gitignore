@@ -219,3 +219,6 @@ __marimo__/
 
 # Local copies of the hands-on-mentor teaching skills (published in their own repo)
 .claude/skills/
+
+# Saved golden-run reports (local experiments)
+results/

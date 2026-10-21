@@ -1,5 +1,8 @@
+import re
+from collections import Counter
 from collections.abc import Callable
 from datetime import UTC, datetime
+from pathlib import Path
 from time import perf_counter
 from typing import Literal
 
@@ -9,6 +12,8 @@ from golden import RouterCase
 
 # A router is any function: (message, session_active) -> class name.
 Router = Callable[[str, bool], str]
+
+CLASSES = ("PASSTHROUGH", "TASK_NEW", "TRIVIAL")
 
 
 class CaseResult(BaseModel):
@@ -47,6 +52,22 @@ class Report(BaseModel):
     def must_passed(self) -> bool:
         """Return whether every required case passed."""
         return all(result.correct for result in self.results if result.must_pass)
+
+    @property
+    def failures(self) -> list[CaseResult]:
+        """Return the cases the router got wrong."""
+        return [result for result in self.results if not result.correct]
+
+    def by_class(self) -> dict[str, tuple[int, int]]:
+        """Map each expected class to (correct, total)."""
+        totals = Counter(result.expected for result in self.results)
+        rights = Counter(result.expected for result in self.results if result.correct)
+        return {name: (rights[name], totals[name]) for name in CLASSES}
+
+    def must_pass_counts(self) -> tuple[int, int]:
+        """Return (must_pass cases passed, must_pass cases in total)."""
+        required = [result for result in self.results if result.must_pass]
+        return sum(result.correct for result in required), len(required)
 
     def summary(self) -> dict[str, object]:
         """Return a compact, serialization-friendly report summary."""
@@ -89,3 +110,45 @@ def run(router: Router, cases: list[RouterCase], name: str) -> Report:
         run_at=datetime.now(UTC),
         results=[run_case(router, case) for case in cases],
     )
+
+
+def save(report: Report, folder: Path) -> Path:
+    """Write the report as one JSON file in `folder` and return its path."""
+    folder.mkdir(parents=True, exist_ok=True)
+    stamp = report.run_at.strftime("%Y%m%dT%H%M%S")
+    safe_name = re.sub(r"[^A-Za-z0-9_.-]", "-", report.router_name)
+    path = folder / f"{stamp}_{safe_name}.json"
+    path.write_text(report.model_dump_json(indent=2))
+    return path
+
+
+def load(path: Path) -> Report:
+    """Read a report written by `save`."""
+    return Report.model_validate_json(Path(path).read_text())
+
+
+def describe_failure(result: CaseResult) -> str:
+    """One line about a wrong answer: id, expected, what happened, the message."""
+    detail = result.error or f"got {result.got}"
+    message = result.message
+    if len(message) > 50:
+        message = message[:47] + "..."
+    required = " [must_pass]" if result.must_pass else ""
+    return f"  #{result.id} expected {result.expected}, {detail}{required}: {message}"
+
+
+def format_report(report: Report) -> str:
+    """Return the text report: summary, per-class scores, and the failed cases."""
+    passed, required = report.must_pass_counts()
+    verdict = "✓" if report.must_passed else "✗"
+    lines = [
+        f"router[{report.router_name}]: {report.correct}/{report.total} correct "
+        f"({report.accuracy:.1%}) · must_pass: {passed}/{required} {verdict}"
+    ]
+    for name, (right, total) in report.by_class().items():
+        lines.append(f"  {name:<12} {right}/{total}")
+    failures = report.failures
+    if failures:
+        lines.append(f"failed ({len(failures)}):")
+        lines.extend(describe_failure(result) for result in failures)
+    return "\n".join(lines)

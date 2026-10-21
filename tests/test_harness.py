@@ -3,7 +3,8 @@ from pathlib import Path
 import pytest
 
 from golden import Golden, RouterCase
-from harness import Router, run
+from harness import Router, format_report, load, run, save
+from run_goldens import main as run_goldens
 
 GOLDEN_FILE = Path(__file__).parent / "golden" / "router_cases.jsonl"
 
@@ -88,3 +89,78 @@ def test_run_does_not_modify_the_cases(cases: list[RouterCase]) -> None:
     run(always("PASSTHROUGH"), cases, name="check")
 
     assert [case.model_dump() for case in cases] == before
+
+
+def test_save_then_load_gives_the_same_report(
+    cases: list[RouterCase], tmp_path: Path
+) -> None:
+    report = run(always("PASSTHROUGH"), cases, name="always-passthrough")
+
+    path = save(report, tmp_path / "runs")
+
+    assert path.parent == tmp_path / "runs"
+    assert path.suffix == ".json"
+    assert load(path) == report
+
+
+def test_save_makes_a_safe_file_name(cases: list[RouterCase], tmp_path: Path) -> None:
+    report = run(always("PASSTHROUGH"), cases, name="my router/v2")
+
+    path = save(report, tmp_path)
+
+    assert path.parent == tmp_path
+    assert "/" not in path.name
+    assert " " not in path.name
+
+
+def test_report_text_shows_summary_and_per_class_scores(
+    cases: list[RouterCase],
+) -> None:
+    report = run(always("PASSTHROUGH"), cases, name="always-passthrough")
+    right = sum(case.expected == "PASSTHROUGH" for case in cases)
+    required = sum(case.must_pass is True for case in cases)
+
+    lines = format_report(report).splitlines()
+
+    assert lines[0].startswith("router[always-passthrough]:")
+    assert f"{right}/{len(cases)} correct" in lines[0]
+    assert f"must_pass: {required}/{required} ✓" in lines[0]
+    class_line = next(line for line in lines if line.startswith("  PASSTHROUGH"))
+    assert class_line.endswith(f"{right}/{right}")
+    task_new = sum(case.expected == "TASK_NEW" for case in cases)
+    wrong_line = next(line for line in lines if line.startswith("  TASK_NEW"))
+    assert wrong_line.endswith(f"0/{task_new}")
+
+
+def test_report_text_lists_failed_cases(cases: list[RouterCase]) -> None:
+    report = run(always("TASK_NEW"), cases, name="always-task-new")
+    wrong = sum(case.expected != "TASK_NEW" for case in cases)
+
+    text = format_report(report)
+
+    assert "must_pass: 0/" in text
+    assert "✗" in text
+    assert f"failed ({wrong}):" in text
+    assert "[must_pass]" in text
+
+
+def test_report_text_shows_the_error_of_a_crashing_router(
+    cases: list[RouterCase],
+) -> None:
+    def crashing(message: str, session_active: bool) -> str:
+        raise ValueError("boom")
+
+    text = format_report(run(crashing, cases, name="crashing"))
+
+    assert "ValueError: boom" in text
+
+
+def test_make_goldens_prints_and_saves_one_report_per_router(
+    tmp_path: Path, capsys: pytest.CaptureFixture[str]
+) -> None:
+    run_goldens(tmp_path)
+
+    output = capsys.readouterr().out
+    assert "router[always-passthrough]" in output
+    assert "router[always-task-new]" in output
+    assert len(list(tmp_path.glob("*.json"))) == 2
