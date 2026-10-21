@@ -4,6 +4,7 @@ from pathlib import Path
 
 from golden import Golden
 from harness import Router, format_report, run, save
+from router import route
 
 ROOT = Path(__file__).resolve().parent.parent
 GOLDEN_FILE = ROOT / "tests" / "golden" / "router_cases.jsonl"
@@ -19,10 +20,11 @@ def always(answer: str) -> Router:
     return router
 
 
-# Routers scored by `make goldens`. The heuristic router joins this list in M3.
+# Routers scored by `make goldens`: two baselines and the heuristic router.
 ROUTERS: dict[str, Router] = {
     "always-passthrough": always("PASSTHROUGH"),
     "always-task-new": always("TASK_NEW"),
+    "heuristic": route,
 }
 
 

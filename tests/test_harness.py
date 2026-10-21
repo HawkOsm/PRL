@@ -163,4 +163,5 @@ def test_make_goldens_prints_and_saves_one_report_per_router(
     output = capsys.readouterr().out
     assert "router[always-passthrough]" in output
     assert "router[always-task-new]" in output
-    assert len(list(tmp_path.glob("*.json"))) == 2
+    assert "router[heuristic]" in output
+    assert len(list(tmp_path.glob("*.json"))) == 3

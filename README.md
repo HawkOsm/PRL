@@ -4,7 +4,20 @@ A local-first frontend for Claude Code. You talk to a small Ollama model running
 own GPU; it routes, clarifies, and compiles your requests — and only clean, well-structured
 prompts ever reach Claude. Fewer wasted turns, fewer wasted tokens, same subscription.
 
-**Status: design phase.** No code yet — the engineering contract comes first.
+**Status: early build (M3 done).** The ledger, event models, stats and a golden-case
+harness exist and are tested; the local-model parts do not exist yet.
+
+Router scores on the 46 golden cases (`make goldens`):
+
+| router | correct | `must_pass` (21 follow-ups) |
+|---|---|---|
+| always `TASK_NEW` (baseline) | 12/46 (26.1%) | 0/21 ✗ |
+| always `PASSTHROUGH` (baseline) | 24/46 (52.2%) | 21/21 ✓ |
+| heuristic rules (no LLM) | 24/46 (52.2%) | 21/21 ✓ |
+
+The rules-only router can only protect follow-ups; telling a new task or a question
+apart needs the local model (M4, next). Target: at least 90% with every `must_pass`
+case right.
 
 ## How it works
 
