@@ -165,3 +165,18 @@ def test_make_goldens_prints_and_saves_one_report_per_router(
     assert "router[always-task-new]" in output
     assert "router[heuristic]" in output
     assert len(list(tmp_path.glob("*.json"))) == 3
+
+
+def test_one_failed_must_pass_case_fails_the_verdict(cases: list[RouterCase]) -> None:
+    # arrange: a router that is right everywhere except for the message "yes"
+    def almost_perfect(message: str, session_active: bool) -> str:
+        if message == "yes":
+            return "TASK_NEW"  # wrong answer for that case
+        return "PASSTHROUGH"  # answers PASSTHROUGH for everything, but gets yes wrong
+
+    # act
+    report = run(almost_perfect, cases, name="almost-perfect")
+
+    # assert: how many correct? what is the verdict? how many must_pass passed?
+    assert report.must_passed is False
+    assert report.correct
