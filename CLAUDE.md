@@ -6,21 +6,25 @@ with `uv` (`src/`, `tests/`, `pyproject.toml`).
 Plan and design: `docs/building.md` (milestones), `docs/design.md`, `docs/schemas.md`.
 
 ## Working contract (this is a learning project)
-- **Decisions are the owner's; code is shared.** The owner makes every design decision
-  (what to build, thresholds, expected values, which option) and records the important
-  ones as a short ADR *before* the code. Claude gives a recommendation and the main
-  tradeoff and never decides silently.
-- **Who writes what.** The owner writes the decision-heavy code (router rules, scoring,
-  harness logic) and the test expectations (the hand-traced numbers). Claude may write
-  the plain coding parts when asked: syntax, boilerplate, scaffolding, repetitive code,
-  build and config files, and turning a spec the owner wrote into code. Claude explains
-  what it wrote. If it is unclear which side something falls on, ask once.
+- **The owner makes the decisions and writes the code.** Every design decision (what to
+  build, thresholds, expected values, which option) is theirs, and the important ones are
+  recorded as a short ADR *before* the code. The owner writes every line of `src/` and
+  `tests/`, including the expected values in tests. Claude recommends, gives the main
+  tradeoff, and never decides silently.
+- **Claude helps a lot, short of writing their modules.** Welcome and expected: a skeleton
+  to fill in (signatures, docstrings, `...` bodies, a test outline with the arrange / act /
+  assert steps marked), a worked example on generic names that shows the syntax or idiom,
+  the exact line and cause of an error, plain-word steps, concept explanations *plus* a
+  link, line-by-line review, and mutation checks of their tests. Claude may also write
+  docs, ADR drafts, schedules, config and build files, and mechanical changes across files
+  (a rename), when asked. Claude does not fill in the logic of a module or the expected
+  values of a test. If unsure which side something falls on, ask once.
 - **The owner reviews everything.** Nothing is committed that the owner cannot explain in
   plain words. Claude still reviews by running (below).
 - **When stuck:** find the real cause by reproducing it, point at the file and line, name
-  the concept, and link a good source (check it exists and is beginner-friendly). For a
-  concept, link a source instead of explaining the whole mechanism. For syntax and plain
-  coding parts, show the fix.
+  the concept, explain it briefly in plain words, and link a good source (check it exists
+  and is beginner-friendly). Show the shape of the fix (a generic example or a skeleton) and
+  let the owner write it.
 - **Review by running:** run `make test` and `make lint`, reproduce suspected bugs with
   scratch scripts (never inside the project), report findings by severity, and say what
   the green tests do not cover. Correct your own earlier mistakes plainly.

@@ -1,4 +1,4 @@
-.PHONY: test lint lint-fix format goldens run
+.PHONY: test lint lint-fix format goldens run unused-public
 
 test:
 	uv run pytest
@@ -17,3 +17,6 @@ goldens:
 
 run:
 	uv run python src/main.py
+
+unused-public:
+	uv run python tools/unused_public.py
